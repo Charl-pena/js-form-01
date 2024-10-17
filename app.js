@@ -23,7 +23,7 @@ formEL.addEventListener("submit" , (e) =>
    // Esta es la solución para incluir un mensaje de error, según el caso (si falla el email o falla la password)
    let errorEmail;
    let errorPassword;
-
+   
    if( !((errorEmail = validateUserEmail(dataObject.email)) || (errorPassword = validateUserPassword(dataObject.password)) ))
    {
       showUserInfo(dataObject)
@@ -35,7 +35,15 @@ formEL.addEventListener("submit" , (e) =>
    }
 });
 
+function removePreviousAlert(selector)
+{
+   const previousAlert = document.querySelector(selector);
+   if
+   (previousAlert !== null) previousAlert.remove();
+}
+
 function showUserInfo(dataObject){
+   removePreviousAlert(".alert");
    const alert = `
       <div class="alert alert-primary" role="alert">
          Este es el email de usuario ${dataObject.email}
@@ -47,6 +55,7 @@ function showUserInfo(dataObject){
 
 function showErrorAlert(mensaje)
 {
+   removePreviousAlert(".alert");
    const alert = `
       <div class="alert alert-danger mt-2" role="alert">
         <p>
@@ -65,8 +74,30 @@ function validateUserEmail(userEmail)
    return (regexEmail.test(userEmail)) ? false: "Fallo tu email";
 }
 
-function validateUserPassword(userPassword)
-{
-   const regexPassword = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+{}|:<>?[\]\/.,])(?!.*\s).{10,16}$/
-   return (regexPassword.test(userPassword))? false: "Fallo tu password";
+// function validateUserPassword(userPassword)
+// {
+//    const regexPassword = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+{}|:<>?[\]\/.,])(?!.*\s).{10,16}$/
+//    return (regexPassword.test(userPassword))? false: "Fallo tu password";
+// }
+
+function validateUserPassword(userPassword) {
+   const breakLine = '<br>';
+   let validaciones = 
+   [
+    /[A-Z]/, "- Debe contener al menos una letra mayúscula." + breakLine,
+    /[0-9]/, "- Debe contener al menos un número." + breakLine,
+    /[!@#$%^&*()_+{}|:<>?[\]\/.,]/, "- Debe contener al menos un carácter especial." + breakLine,
+    /^\S*$/, "- No debe contener espacios." + breakLine,
+    /^.{10,16}$/, "- Debe tener entre 10 y 16 caracteres." + breakLine
+   ];
+
+   let message = "";
+   
+   message = validaciones.reduce((acc, cur, i) => 
+      (i % 2 === 0) 
+      ? (cur.test(userPassword)) ? acc + "" : acc + validaciones[i + 1]
+      : acc + ""
+   , "");
+   
+   return (message.length === 0) ? false : message; 
 }
