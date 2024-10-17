@@ -71,7 +71,7 @@ function validateUserEmail(userEmail)
 {
    // const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; //Regex Alternativa pero dependiente de la validación por html
    const regexEmail =/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-   return (regexEmail.test(userEmail)) ? false: "Fallo tu email";
+   return (regexEmail.test(userEmail)) ? false: "Introduce un Email valido.";
 }
 
 // function validateUserPassword(userPassword)
